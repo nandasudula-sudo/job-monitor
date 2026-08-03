@@ -1,0 +1,17 @@
+{
+    "high_priority": [
+        "Google",
+        "Microsoft",
+        "Amazon",
+        "Nvidia",
+        "Atlassian",
+        "Uber"
+    ],
+
+    "medium_priority": [
+        "Oracle",
+        "Salesforce",
+        "PayPal",
+        "Adobe"
+    ]
+}

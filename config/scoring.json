@@ -1,0 +1,23 @@
+{
+    "minimum_score": 10,
+
+    "titles": {
+        "software engineer": 10,
+        "backend engineer": 10,
+        "java developer": 8,
+        "machine learning engineer": 8,
+        "data scientist": 8,
+        "security engineer": 8
+    },
+
+    "locations": {
+        "hyderabad": 10,
+        "bengaluru": 10,
+        "pune": 8,
+        "chennai": 8,
+        "gurgaon": 8,
+        "noida": 8,
+        "mumbai": 8,
+        "remote": 5
+    }
+}
