@@ -1,11 +1,18 @@
-from dataclasses import dataclass
+from datetime import datetime
 
 
-@dataclass
-class Job:
-    company: str
-    title: str
-    location: str
-    url: str
-    source: str
-    discovered_at: str
+def create_job(
+    company,
+    title,
+    location,
+    url,
+    source
+):
+    return {
+        "company": company,
+        "title": title,
+        "location": location,
+        "url": url,
+        "source": source,
+        "discovered_at": datetime.utcnow().isoformat(),
+    }
