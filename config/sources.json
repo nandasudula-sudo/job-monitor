@@ -1,5 +1,16 @@
 {
     "sources": [
-        "sample"
-    ]
+        "sample",
+        "greenhouse",
+        "lever"
+    ],
+
+    "greenhouse_companies": [
+        "rubrik",
+        "mongodb",
+        "okta",
+        "stripe"
+    ],
+
+    "lever_companies": []
 }

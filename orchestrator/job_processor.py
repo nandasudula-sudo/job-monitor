@@ -1,6 +1,7 @@
 from database.database import insert_job
 from database.database import job_exists
 from filters.job_filter import matches
+from logs.logger import logger
 from notifier.telegram_bot import send_message
 from ranking.scorer import calculate_score
 
@@ -11,17 +12,17 @@ MINIMUM_SCORE = 10
 def process_job(job):
 
     if not matches(job):
-        print(f"Rejected: {job['title']}")
+        logger.info(f"Rejected: {job['title']}")
         return
 
     score = calculate_score(job)
 
     if score < MINIMUM_SCORE:
-        print(f"Low score: {job['title']}")
+        logger.info(f"Low score: {job['title']}")
         return
 
     if job_exists(job["url"]):
-        print(f"Skipping: {job['title']}")
+        logger.info(f"Skipping: {job['title']}")
         return
 
     insert_job(job)
@@ -38,4 +39,4 @@ def process_job(job):
 
     send_message(message)
 
-    print(f"Added: {job['title']}")
+    logger.info(f"Added: {job['title']}")

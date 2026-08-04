@@ -1,19 +1,47 @@
 import requests
 
+from config.loader import load_json
 
-def fetch_jobs(url):
-    try:
-        response = requests.get(url, timeout=30)
 
-        print("Status code:", response.status_code)
-        print("Headers:", response.headers.get("content-type"))
+def fetch_company_jobs(company_name):
+    url = (
+        f"https://boards-api.greenhouse.io/v1/boards/"
+        f"{company_name}/jobs"
+    )
 
-        if response.status_code != 200:
-            print(response.text)
-            return []
+    response = requests.get(url, timeout=30)
 
-        return response.json()
-
-    except Exception as error:
-        print("ERROR:", error)
+    if response.status_code != 200:
+        print(f"Unable to retrieve jobs for {company_name}")
         return []
+
+    data = response.json()
+
+    jobs = []
+
+    for job in data.get("jobs", []):
+
+        jobs.append(
+            {
+                "company": company_name,
+                "title": job.get("title", ""),
+                "location": job.get("location", {}).get("name", ""),
+                "url": job.get("absolute_url", ""),
+                "source": "greenhouse",
+            }
+        )
+
+    return jobs
+
+
+def fetch_jobs():
+    config = load_json("config/sources.json")
+
+    companies = config["greenhouse_companies"]
+
+    all_jobs = []
+
+    for company in companies:
+        all_jobs.extend(fetch_company_jobs(company))
+
+    return all_jobs

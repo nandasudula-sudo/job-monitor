@@ -1,5 +1,4 @@
-from scrapers.greenhouse import fetch_jobs
-
+from scrapers.lever import fetch_jobs
 
 jobs = fetch_jobs()
 
