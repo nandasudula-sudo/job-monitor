@@ -20,7 +20,6 @@ def fetch_company_jobs(company_name):
     jobs = []
 
     for job in data.get("jobs", []):
-
         jobs.append(
             {
                 "company": company_name,
@@ -35,9 +34,9 @@ def fetch_company_jobs(company_name):
 
 
 def fetch_jobs():
-    config = load_json("config/sources.json")
+    config = load_json("config/greenhouse_companies.json")
 
-    companies = config["greenhouse_companies"]
+    companies = config["companies"]
 
     all_jobs = []
 

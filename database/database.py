@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 
 DATABASE = "storage/jobs.db"
@@ -13,7 +14,8 @@ def initialize_database():
 
     cursor = connection.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS jobs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             company TEXT,
@@ -23,7 +25,8 @@ def initialize_database():
             url TEXT UNIQUE,
             discovered_at TEXT
         )
-    """)
+        """
+    )
 
     connection.commit()
     connection.close()
@@ -33,6 +36,11 @@ def insert_job(job):
     connection = connect()
 
     cursor = connection.cursor()
+
+    discovered_at = job.get(
+        "discovered_at",
+        datetime.utcnow().isoformat()
+    )
 
     try:
         cursor.execute(
@@ -53,7 +61,7 @@ def insert_job(job):
                 job["location"],
                 job["source"],
                 job["url"],
-                job["discovered_at"],
+                discovered_at,
             ),
         )
 

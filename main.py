@@ -1,20 +1,22 @@
 from database.database import initialize_database
+from logs.logger import logger
 from orchestrator.job_processor import process_job
-from scrapers.source_manager import load_sources
+from scrapers.source_manager import fetch_all_jobs
 
 
 def main():
     initialize_database()
 
-    sources = load_sources()
+    logger.info("Starting job monitor")
 
-    for source in sources:
-        jobs = source()
+    jobs = fetch_all_jobs()
 
-        for job in jobs:
-            process_job(job)
+    logger.info(f"Total jobs collected: {len(jobs)}")
 
-    print("Completed.")
+    for job in jobs:
+        process_job(job)
+
+    logger.info("Finished execution")
 
 
 if __name__ == "__main__":

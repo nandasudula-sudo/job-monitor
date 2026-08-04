@@ -1,13 +1,12 @@
 import json
 
+from logs.logger import logger
 from scrapers.greenhouse import fetch_jobs as fetch_greenhouse_jobs
-from scrapers.lever import fetch_jobs as fetch_lever_jobs
-from scrapers.sample_source import fetch_jobs as fetch_sample_jobs
+
 
 
 SOURCE_MAPPING = {
-    "sample": fetch_sample_jobs,
-    "greenhouse": fetch_greenhouse_jobs
+    "greenhouse": fetch_greenhouse_jobs,
 }
 
 
@@ -20,5 +19,27 @@ def load_sources():
     for source_name in config["sources"]:
         if source_name in SOURCE_MAPPING:
             sources.append(SOURCE_MAPPING[source_name])
+        else:
+            logger.warning(f"Unknown source: {source_name}")
 
     return sources
+
+
+def fetch_all_jobs():
+    all_jobs = []
+
+    for source in load_sources():
+        try:
+            jobs = source()
+            all_jobs.extend(jobs)
+
+            logger.info(
+                f"Collected {len(jobs)} jobs from {source.__name__}"
+            )
+
+        except Exception as error:
+            logger.error(
+                f"Error while processing {source.__name__}: {error}"
+            )
+
+    return all_jobs
