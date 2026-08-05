@@ -1,45 +1,48 @@
-import json
+import logging
 
-from logs.logger import logger
+from config.loader import load_json
+from scrapers.ashby import fetch_jobs as fetch_ashby_jobs
 from scrapers.greenhouse import fetch_jobs as fetch_greenhouse_jobs
-
 
 
 SOURCE_MAPPING = {
     "greenhouse": fetch_greenhouse_jobs,
+    "ashby": fetch_ashby_jobs,
 }
 
 
-def load_sources():
-    with open("config/sources.json", "r") as file:
-        config = json.load(file)
-
-    sources = []
-
-    for source_name in config["sources"]:
-        if source_name in SOURCE_MAPPING:
-            sources.append(SOURCE_MAPPING[source_name])
-        else:
-            logger.warning(f"Unknown source: {source_name}")
-
-    return sources
-
-
 def fetch_all_jobs():
+    config = load_json("config/sources.json")
+
+    sources = config["sources"]
+
     all_jobs = []
 
-    for source in load_sources():
+    for source in sources:
+        if source not in SOURCE_MAPPING:
+            logging.warning(
+                f"Unknown source: {source}"
+            )
+            continue
+
         try:
-            jobs = source()
+            jobs = SOURCE_MAPPING[source]()
+
+            logging.info(
+                f"Collected {len(jobs)} jobs "
+                f"from {source}"
+            )
+
             all_jobs.extend(jobs)
 
-            logger.info(
-                f"Collected {len(jobs)} jobs from {source.__name__}"
+        except Exception as error:
+            logging.error(
+                f"Error while processing "
+                f"{source}: {error}"
             )
 
-        except Exception as error:
-            logger.error(
-                f"Error while processing {source.__name__}: {error}"
-            )
+    logging.info(
+        f"Total jobs collected: {len(all_jobs)}"
+    )
 
     return all_jobs

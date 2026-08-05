@@ -1,0 +1,40 @@
+{
+    "include_keywords": [
+        "software engineer",
+        "backend engineer",
+        "java developer",
+        "full stack engineer",
+        "machine learning engineer",
+        "data scientist",
+        "security engineer"
+    ],
+
+    "exclude_keywords": [
+        "marketing",
+        "sales",
+        "account executive",
+        "recruiter"
+    ],
+
+    "experience_keywords": [
+        "senior",
+        "staff",
+        "principal",
+        "manager",
+        "director",
+        "lead",
+        "architect"
+    ],
+
+    "locations": [
+        "hyderabad",
+        "bengaluru",
+        "pune",
+        "chennai",
+        "gurgaon",
+        "noida",
+        "mumbai",
+        "remote",
+        "india"
+    ]
+}
