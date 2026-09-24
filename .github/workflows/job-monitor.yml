@@ -1,4 +1,4 @@
-name: Job Monitor
+﻿name: Job Monitor
 
 on:
   schedule:
@@ -16,7 +16,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
-
         with:
           python-version: "3.11"
 
@@ -25,10 +24,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run job monitor
-        run: |
-          python main.py
+      - name: Restore jobs database
+        run: git checkout storage/jobs.db || true
 
+      - name: Run job monitor
+        run: python main.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Save jobs database
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add storage/jobs.db
+          git diff --cached --quiet || git commit -m "chore: update jobs.db [skip ci]"
+          git push
