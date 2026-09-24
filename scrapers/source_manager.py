@@ -3,11 +3,13 @@ import logging
 from config.loader import load_json
 from scrapers.ashby import fetch_jobs as fetch_ashby_jobs
 from scrapers.greenhouse import fetch_jobs as fetch_greenhouse_jobs
+from scrapers.lever import fetch_jobs as fetch_lever_jobs
 
 
 SOURCE_MAPPING = {
     "greenhouse": fetch_greenhouse_jobs,
     "ashby": fetch_ashby_jobs,
+    "lever": fetch_lever_jobs,
 }
 
 

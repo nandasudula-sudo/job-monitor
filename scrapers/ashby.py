@@ -1,4 +1,4 @@
-import requests
+﻿import requests
 
 from config.loader import load_json
 from models.job import create_job
@@ -47,11 +47,19 @@ def fetch_company_jobs(company_name):
         )
         return []
 
-    postings = (
+    board = (
         data.get("data", {})
-        .get("jobBoardWithTeams", {})
-        .get("jobPostings", [])
+        .get("jobBoardWithTeams")
     )
+
+    if board is None:
+        print(
+            f"No job board found for "
+            f"{company_name}, skipping."
+        )
+        return []
+
+    postings = board.get("jobPostings", [])
 
     jobs = []
 
